@@ -25,5 +25,6 @@ public class MessageConstant {
     public static final String ORDER_NOT_FOUND = "订单不存在";
     public static final String ALREADY_EXITS = "已存在";
     public static final String NOT_EXITS = "不存在";
+    public static final String DISH_ON_SETMEAL_SALE = "套餐内包含启售菜品，无法停售";
 
 }

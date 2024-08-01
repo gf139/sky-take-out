@@ -11,6 +11,7 @@ import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.entity.Employee;
 import com.sky.exception.DeletionNotAllowedException;
+import com.sky.exception.SetmealEnableFailedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -64,7 +66,6 @@ public class DishServiceImpl implements DishService {
             dishFlavorMapper.insertBatch(flavors);
         }
     }
-
     /**
      * 菜品分页查询菜品
      * @param dishPageQueryDTO
@@ -157,5 +158,64 @@ public class DishServiceImpl implements DishService {
 
     }
 
+    /**
+     * 条件查询菜品和口味
+     * @param dish
+     * @return
+     */
+    public List<DishVO> listWithFlavor(Dish dish) {
+        List<Dish> dishList = dishMapper.list(dish);
+
+        List<DishVO> dishVOList = new ArrayList<>();
+
+        for (Dish d : dishList) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d,dishVO);
+
+            //根据菜品id查询对应的口味
+            List<DishFlavor> flavors = dishFlavorMapper.getByDishId(d.getId());
+
+            dishVO.setFlavors(flavors);
+            dishVOList.add(dishVO);
+        }
+
+        return dishVOList;
+    }
+
+    /**
+     * 根据分类ID查询菜品
+     * @param categoryId
+     * @return
+     */
+    public List<Dish> list(Long categoryId) {
+        Dish dish = Dish.builder()
+                .categoryId(categoryId)
+                .status(StatusConstant.ENABLE)
+                .build();
+
+        return dishMapper.list(dish);
+    }
+
+    /**
+     * 修改菜品状态
+     * @param status
+     * @param id
+     */
+    public void startOrStop(Integer status, Long id) {
+        //禁售套餐时，判断起售套餐内是否有菜品，有停售菜品提示"套餐内包含启售菜品时，无法停售"
+        if(status == StatusConstant.DISABLE){
+            //select c.* from setmeal s join setmeal_dish c on s.id = c.setmeal_id where s.status = 1 and c.dish_id = #{id}
+            List<Dish> dishList = dishMapper.getByDishId(id);
+            if(dishList != null && dishList.size() > 0){
+                throw new SetmealEnableFailedException(MessageConstant.DISH_ON_SETMEAL_SALE);
+            }
+        }
+
+        Dish dish= new Dish().builder()
+                .status(status)
+                .id(id)
+                .build();
+        dishMapper.update(dish);
+    }
 
 }
