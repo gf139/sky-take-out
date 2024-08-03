@@ -2,10 +2,9 @@ package com.sky.service.impl;
 
 import com.sky.context.BaseContext;
 import com.sky.entity.AddressBook;
-import com.sky.mapper.OrderMapper;
-import com.sky.service.OrderService;
+import com.sky.mapper.AddressBookMapper;
+import com.sky.service.AddressBookService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +12,10 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class OrderServiceImpl implements OrderService {
+public class AddressBookServiceImpl implements AddressBookService {
 
     @Autowired
-    private OrderMapper orderMapper;
+    private AddressBookMapper addressBookMapper;
 
 
     /**
@@ -28,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
         Long userId = BaseContext.getCurrentId();
         addressBook.setUserId(userId);
         addressBook.setIsDefault(0);
-        orderMapper.add(addressBook);
+        addressBookMapper.add(addressBook);
     }
 
     /**
@@ -37,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
      */
     public List<AddressBook> list() {
         Long userId = BaseContext.getCurrentId();
-        List<AddressBook> list = orderMapper.getById(userId);
+        List<AddressBook> list = addressBookMapper.getById(userId);
         return list;
     }
 
@@ -47,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
      */
     public AddressBook listDefault() {
         Long userId = BaseContext.getCurrentId();
-        AddressBook list = orderMapper.getDefaultById(userId);
+        AddressBook list = addressBookMapper.getDefaultById(userId);
         return list;
     }
 
@@ -56,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     public void update(AddressBook addressBook) {
-        orderMapper.update(addressBook);
+        addressBookMapper.update(addressBook);
     }
 
     /**
@@ -64,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     public void delteById(Long id) {
-        orderMapper.deleteById(id);
+        addressBookMapper.deleteById(id);
     }
 
     /**
@@ -72,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     public AddressBook listById(Long id) {
-        AddressBook addressBook = orderMapper.listById(id);
+        AddressBook addressBook = addressBookMapper.listById(id);
         return addressBook;
     }
 
@@ -83,16 +82,15 @@ public class OrderServiceImpl implements OrderService {
     public void setDefault(Long id) {
         Long userId = BaseContext.getCurrentId();
         //得到原来默认地址
-        AddressBook list = orderMapper.getDefaultById(userId);
+        AddressBook list = addressBookMapper.getDefaultById(userId);
         //将原来默认地址修改为非
         list.setIsDefault(0);
 
-        log.info("111");
         //传入进行修改将原来默认地址改为非
-        orderMapper.update(list);
+        addressBookMapper.update(list);
 
         //设置默认地址
-        orderMapper.setDefault(id);
+        addressBookMapper.setDefault(id);
     }
 
 }
