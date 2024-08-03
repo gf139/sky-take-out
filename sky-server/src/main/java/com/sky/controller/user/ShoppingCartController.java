@@ -42,4 +42,28 @@ public class ShoppingCartController {
     }
 
 
+    /**
+     * 清空购物车
+     * @return
+     */
+    @ApiOperation("清空购物车")
+    @DeleteMapping("/clean")
+    public Result clean(){
+        log.info("清空购物车");
+        shoppingCartService.clean();
+        return Result.success();
+    }
+
+    /**
+     * 减少购物车
+     * @return
+     */
+    @ApiOperation("减少购物车")
+    @PostMapping("/sub")
+    public Result sub(@RequestBody ShoppingCartDTO shoppingCartDTO){
+        log.info("减少购物车");
+        shoppingCartService.sub(shoppingCartDTO);
+        return Result.success();
+    }
+
 }
