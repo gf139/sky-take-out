@@ -40,5 +40,57 @@
         where id = #{id}
     </update>
 
+    <select id="pageQuery" resultType="com.sky.vo.OrderVO">
+        select * from orders o
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="phone != null and phone !=''">
+                and phone = #{phone}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="number != null and number != ''">
+                and number = #{number}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+<!--            <if test="beginTime != null">-->
+<!--                and order_time >= #{beginTime}-->
+<!--            </if>-->
+<!--            <if test="endTime != null">-->
+<!--                and order_time <=  #{endTime}-->
+<!--            </if>-->
+        </where>
+        order by o.order_time desc
+    </select>
+
+
+    <select id="get" resultType="com.sky.entity.Orders">
+        select * from orders
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="number != null">
+                and number = #{number}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete from orders
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </delete>
 
 </mapper>

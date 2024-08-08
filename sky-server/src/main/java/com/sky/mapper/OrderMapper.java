@@ -1,7 +1,11 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.AddressBook;
+import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
+import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
@@ -47,4 +51,46 @@ public interface OrderMapper {
     @Update("update orders set status = #{orderStatus},pay_status = #{orderPaidStatus} ,checkout_time = #{check_out_time} where id = #{id}")
     void updateStatus(Integer orderStatus, Integer orderPaidStatus,LocalDateTime check_out_time, Long id);
 
+
+    /**
+     * 历史订单查询
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    Page<OrderVO> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
+
+
+    /**
+     * 根据ID查询细节
+     * @param orderId
+     * @return
+     */
+    @Select("select * from order_detail where order_id = #{orderId}")
+    List<OrderDetail> getDetailsByUserId(Long orderId);
+
+    /**
+     * 查询语句
+     * @param orderVO
+     * @return
+     */
+    //TODO 时间有问题
+    Orders get(OrderVO orderVO);
+
+    /**
+     * 取消订单
+     * @param id
+     * @return
+     */
+    void delete(Integer id);
+
+    /**
+     * 各个状态的订单数量统计
+     * @param
+     * @return
+     */
+    @Select("select * from orders")
+    List<Orders> getAll();
+
+    @Select("select * from orders where id = #{id}")
+    Orders getById(Long id);
 }
