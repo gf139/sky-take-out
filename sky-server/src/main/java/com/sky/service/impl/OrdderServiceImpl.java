@@ -3,7 +3,6 @@ package com.sky.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.xiaoymin.knife4j.core.util.CollectionUtils;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.*;
@@ -44,14 +43,15 @@ public class OrdderServiceImpl implements OrderService {
     private UserMapper userMapper;
     @Autowired
     private AddressBookMapper addressBookMapper;
-    @Autowired
-    private WeChatPayUtil weChatPayUtil;
+
+//    @Autowired
+//    private WeChatPayUtil weChatPayUtil;
 
 
     /**
      * 发送订单
      * @param ordersSubmitDTO
-     * @return
+     * @return orderSubmitVO
      */
     @Transactional
     public OrderSubmitVO submitOrder(OrdersSubmitDTO ordersSubmitDTO) {
@@ -68,7 +68,7 @@ public class OrdderServiceImpl implements OrderService {
         shoppingCart.setUserId(userId);
         List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
 
-        if(list == null || list.size() == 0){
+        if(list == null || list.isEmpty()){
             throw new ShoppingCartBusinessException(MessageConstant.SHOPPING_CART_IS_NULL);
         }
 
@@ -115,12 +115,12 @@ public class OrdderServiceImpl implements OrderService {
      * 订单支付
      *
      * @param ordersPaymentDTO
-     * @return
+     * @return vo
      */
     public OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception {
         // 当前登录用户id
-        Long userId = BaseContext.getCurrentId();
-        User user = userMapper.getById(userId);
+//        Long userId = BaseContext.getCurrentId();
+//        User user = userMapper.getById(userId);
 
         //调用微信支付接口，生成预支付交易单
 
@@ -173,7 +173,6 @@ public class OrdderServiceImpl implements OrderService {
 
     /**
      * 支付成功，修改订单状态
-     *
      * @param outTradeNo
      */
     public void paySuccess(String outTradeNo) {
@@ -195,7 +194,7 @@ public class OrdderServiceImpl implements OrderService {
     /**
      * 历史订单查询
      * @param ordersPageQueryDTO
-     * @return
+     * @return PageResult
      */
     public PageResult pageQuery(OrdersPageQueryDTO ordersPageQueryDTO) {
 
@@ -222,7 +221,7 @@ public class OrdderServiceImpl implements OrderService {
     /**
      * 订单搜索
      * @param ordersPageQueryDTO
-     * @return
+     * @return PageResult
      */
     public PageResult ordersPageQuery(OrdersPageQueryDTO ordersPageQueryDTO) {
 

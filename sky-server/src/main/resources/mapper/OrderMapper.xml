@@ -87,7 +87,6 @@
         order by order_time desc
         </select>
 
-
     <delete id="delete">
         delete from orders
         <where>
@@ -96,5 +95,6 @@
             </if>
         </where>
     </delete>
+
 
 </mapper>
