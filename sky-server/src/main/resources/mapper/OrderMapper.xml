@@ -53,12 +53,6 @@
             <if test="userId != null">
                 and user_id = #{userId}
             </if>
-            <if test="beginTime != null">
-                and order_time >= #{beginTime}
-            </if>
-            <if test="endTime != null">
-                and #{endTime} >= order_time
-            </if>
         </where>
     </select>
 
