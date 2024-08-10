@@ -11,6 +11,7 @@
             (#{ds.name},#{ds.image},#{ds.orderId},#{ds.dishId},#{ds.setmealId},#{ds.dishFlavor},#{ds.number},#{ds.amount})
         </foreach>
     </insert>
+
     <delete id="delete">
         delete from order_detail
         <where>

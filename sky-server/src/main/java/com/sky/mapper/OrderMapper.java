@@ -2,7 +2,6 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.entity.AddressBook;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
@@ -53,11 +52,11 @@ public interface OrderMapper {
 
 
     /**
-     * 历史订单查询
+     * 分页条件查询并按下单时间排序
      * @param ordersPageQueryDTO
-     * @return
      */
     Page<OrderVO> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
+
 
 
     /**
@@ -73,7 +72,6 @@ public interface OrderMapper {
      * @param orderVO
      * @return
      */
-    //TODO 时间有问题
     Orders get(OrderVO orderVO);
 
     /**
